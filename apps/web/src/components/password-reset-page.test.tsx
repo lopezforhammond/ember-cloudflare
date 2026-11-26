@@ -29,6 +29,7 @@ const workspace: Omit<Bootstrap, "user"> = {
   setupPlaceholders: { name: "Kevin Rose", emailAddress: "kevin@kevinrose.com" },
   guestSignIn: false,
   signInWithMemberful: false,
+  memberfulCodes: false,
   signInWithSso: null,
   turnstileSiteKey: null,
   passwordResetCodes: true,
@@ -96,7 +97,7 @@ describe("Reset a forgotten password with an emailed code", () => {
   it("asks for an email address, then for the code Ember emailed it with a new password", async () => {
     const fetch = serve(asked);
     open();
-    expect(document.title).toBe("Reset your password");
+    expect(document.title).toBe("Reset your password · Team Lopez");
     expect(screen.getByRole("heading", { level: 1, name: "Reset your password" })).toBeInTheDocument();
     expect(screen.getByText("Enter your email address, and Ember will email you a code to choose a new password with.")).toBeInTheDocument();
     expect(emailField()).toHaveFocus();

@@ -139,7 +139,7 @@ function serve({
   return vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
     const route = `${init?.method ?? "GET"} ${String(input)}`;
     if (route === "GET /api/bootstrap") {
-      return Response.json({ setup, setupAccess, setupPlaceholders: PLACEHOLDERS, guestSignIn, signInWithMemberful: false, signInWithSso: null, account, version: "0.1", vapidPublicKey: null, turnstileSiteKey: null, passwordResetCodes, platform: CHROME_MAC, user: signedIn ? me : null });
+      return Response.json({ setup, setupAccess, setupPlaceholders: PLACEHOLDERS, guestSignIn, signInWithMemberful: false, memberfulCodes: false, signInWithSso: null, account, version: "0.1", vapidPublicKey: null, turnstileSiteKey: null, passwordResetCodes, platform: CHROME_MAC, user: signedIn ? me : null });
     }
     if (route === "POST /api/first_run") {
       [setup, signedIn, rooms] = ["complete", true, firstRooms];
@@ -533,7 +533,7 @@ describe("Rename the workspace", () => {
     act(() => WorkspaceSocket.all[0]!.welcome(ada));
     act(() => WorkspaceSocket.all[0]!.receive({ type: "account.updated", account: { ...EMBER, name: "Analytical Engines" } }));
     expect(screen.getByRole("heading", { level: 2, name: "Analytical Engines" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Ember home" })).toHaveAttribute("title", "Analytical Engines");
+    expect(screen.getByRole("link", { name: "Team Lopez home" })).toHaveAttribute("title", "Analytical Engines");
   });
 
   it("renames the workspace from its settings, and the rail takes the new name, and the sidebar back in a room", async () => {
@@ -547,7 +547,7 @@ describe("Rename the workspace", () => {
     await user.type(name, "Analytical Engines{Enter}");
 
     expect(await screen.findByRole("alert")).toHaveTextContent("Changes saved.");
-    expect(screen.getByRole("link", { name: "Ember home" })).toHaveAttribute("title", "Analytical Engines");
+    expect(screen.getByRole("link", { name: "Team Lopez home" })).toHaveAttribute("title", "Analytical Engines");
     expect(screen.getByRole("link", { name: "Admin" })).toHaveAttribute("aria-current", "page");
     // Community settings take the sidebar's place.
     await user.click(screen.getByRole("link", { name: "Go Back" }));
@@ -568,7 +568,7 @@ describe("Rename the workspace", () => {
 
     // The field too, which follows the workspace until it's typed in.
     await waitFor(() => expect(screen.getByRole("textbox", { name: "Community name" })).toHaveValue("Analytical Engines"));
-    expect(screen.getByRole("link", { name: "Ember home" })).toHaveAttribute("title", "Analytical Engines");
+    expect(screen.getByRole("link", { name: "Team Lopez home" })).toHaveAttribute("title", "Analytical Engines");
   });
 
   it("keeps a name the workspace socket says over a save answered after it said so, which may be older", async () => {
@@ -589,7 +589,7 @@ describe("Rename the workspace", () => {
     answerSave();
 
     expect(await screen.findByRole("alert")).toHaveTextContent("Changes saved.");
-    expect(screen.getByRole("link", { name: "Ember home" })).toHaveAttribute("title", "Analytical Engines");
+    expect(screen.getByRole("link", { name: "Team Lopez home" })).toHaveAttribute("title", "Analytical Engines");
   });
 });
 
@@ -829,7 +829,7 @@ describe("Huddles", () => {
 
 describe("Workspace logo", () => {
   const LOGO = "/account/logo?v=20261017120000";
-  const brand = () => screen.getByRole("link", { name: "Ember home" }).querySelector("img");
+  const brand = () => screen.getByRole("link", { name: "Team Lopez home" }).querySelector("img");
 
   it("shows the workspace's logo before anyone signs in", async () => {
     serve({ signedIn: false, account: { ...EMBER, logo: LOGO } });
